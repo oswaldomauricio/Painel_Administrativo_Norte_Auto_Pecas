@@ -23,6 +23,8 @@ class Login:
 
         return dados
     
+    
+
 # login = Login(name="oswaldo", password="44844")
 # dados = login.execute_query()
 
