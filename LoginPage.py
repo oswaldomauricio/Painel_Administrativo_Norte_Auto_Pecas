@@ -5,13 +5,7 @@ import streamlit as st
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Controllers.LoginController import Login
 
-login_query = """
-            SELECT * FROM ANALYTICS.USERS U 
-            WHERE NAME = :name AND PASSWORD = :password
-        """
-st.image('../Images/Logo.png')
-
-
+st.image('./Images/Logo.png')
 
 # st.title('Página de Login')
 
@@ -20,12 +14,14 @@ password = st.text_input('Senha', value='', placeholder='Digite sua senha', type
 
 if st.button('Entrar'):
     if username and password:
-        login_user = Login(login_query, name=username, password=password)
+        login_user = Login(username, password)
         try:
             dados = login_user.execute_query()
             if not dados.empty:
+                st.session_state["user_id"] = dados["ID"]
                 st.success(f'Bem-vindo(a), {username}!')
                 st.write('Dados do Usuário:', dados)
+                
             else:
                 st.error('Usuário ou senha inválidos.')
         except Exception as e:
