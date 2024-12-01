@@ -1,8 +1,8 @@
 import sys
 import os
 import streamlit as st
-from streamlit_cookies_manager import EncryptedCookieManager
 from streamlit_cookies_controller import CookieController
+
 
 controller = CookieController()
 
@@ -11,18 +11,24 @@ cookies = controller.getAll()
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from Controllers.LoginController import Login
 
-
+st.set_page_config(
+    page_title="Norte Auto Peças - Painel de meta",
+    page_icon="🔒",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 st.image('./Images/Logo.png')
 
 
 def is_logged_in():
-    return cookies.get("user_status", False) == "True"
+    user_status = cookies.get("user_status")
+    if not user_status: 
+        return False
+    return user_status
 
 def LoginPage():
     if is_logged_in():
         st.success(f'Bem-vindo(a) de volta, {cookies.get("username")}!')
-        if st.button("Sair"):
-            logout_user()
         return
 
     username = st.text_input('Usuário', value='', placeholder='Digite seu nome de usuário')

@@ -14,18 +14,13 @@ class Login:
     def execute_query(self):
         conn = get_connection()
         
-        dados = pd.read_sql("""
+        data = pd.read_sql("""
             SELECT * FROM ANALYTICS.USERS U 
             WHERE NAME = :name AND PASSWORD = :password
         """, conn, params={"name": self.name, "password": self.password})
 
+        data.reset_index(drop=True, inplace=True)
+
         conn.close()
 
-        return dados
-    
-    
-
-# login = Login(name="oswaldo", password="44844")
-# dados = login.execute_query()
-
-# print(dados)
+        return data
